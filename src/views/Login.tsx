@@ -1,5 +1,3 @@
-import { motion } from "framer-motion";
-
 import { Frame } from "../components/Frame";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
