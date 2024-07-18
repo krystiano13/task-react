@@ -9,15 +9,15 @@ export default {
     themes: [
       {
         myTheme: {
-          "primary": "#60c4b9",
-          "secondary": "#d7ebea",
-          "neutral": "#48555f",
+          primary: "#60c4b9",
+          secondary: "#9fdbd3b4",
+          neutral: "#48555f",
           "base-100": "#ffffff",
-          "accent": "#768498"
-        }
+          accent: "#768498",
+        },
       },
       "light",
-      "emerald"
-    ]
-  }
+      "emerald",
+    ],
+  },
 };

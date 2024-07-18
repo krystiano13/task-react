@@ -1,12 +1,23 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 interface Props {
   type: "email" | "password";
+  animationDelay: number;
 }
 
-export const Input: React.FC<Props> = ({ type }) => {
+export const Input: React.FC<Props> = ({ type, animationDelay }) => {
   return (
-    <label className="input input-bordered transition-colors flex items-center gap-2">
+    <motion.label
+      transition={{
+        type: "tween",
+        bounce: 0.4,
+        delay: animationDelay,
+        duration: 0.15,
+      }}
+      animate={{ opacity: [0, 1], scale: [0.5, 1], y: [25, 0] }}
+      className="input input-bordered transform-gpu transition-colors flex items-center gap-2"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
@@ -21,9 +32,9 @@ export const Input: React.FC<Props> = ({ type }) => {
         ) : (
           <>
             <path
-              fill-rule="evenodd"
+              fillRule="evenodd"
               d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-              clip-rule="evenodd"
+              clipRule="evenodd"
             />
           </>
         )}
@@ -33,6 +44,6 @@ export const Input: React.FC<Props> = ({ type }) => {
         className="grow"
         placeholder={type === "email" ? "Email" : "Password"}
       />
-    </label>
+    </motion.label>
   );
 };

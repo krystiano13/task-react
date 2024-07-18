@@ -7,9 +7,11 @@ export function Login() {
     <div className="w-full h-full flex justify-center items-center">
       <Frame>
         <form className="flex flex-col justify-center items-center gap-4">
-          <Input type="email" />
-          <Input type="password" />
-          <Button type="submit">Log In</Button>
+          <Input animationDelay={0.2} type="email" />
+          <Input animationDelay={0.25} type="password" />
+          <Button animationDelay={0.3} type="submit">
+            Log In
+          </Button>
         </form>
       </Frame>
     </div>
