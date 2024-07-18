@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.mockup-window::before {
+  color: #60c4b9;
+  opacity: 1;
+}
+
+.input:focus,
+.input:focus-within {
+  border-color: #60c4b9;
+  outline-color: #d7ebea;
+}

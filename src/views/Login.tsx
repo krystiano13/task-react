@@ -1,5 +1,6 @@
 import { Frame } from "../components/Frame";
 import { Input } from "../components/Input";
+import { Button } from "../components/Button";
 
 export function Login() {
   return (
@@ -8,6 +9,7 @@ export function Login() {
         <form className="flex flex-col justify-center items-center gap-4">
           <Input type="email" />
           <Input type="password" />
+          <Button type="submit">Log In</Button>
         </form>
       </Frame>
     </div>
