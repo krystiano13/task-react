@@ -1,3 +1,15 @@
+import { Frame } from "../components/Frame";
+import { Input } from "../components/Input";
+
 export function Login() {
-    return <></>
+  return (
+    <div className="w-full h-full flex justify-center items-center">
+      <Frame>
+        <form className="flex flex-col justify-center items-center gap-4">
+          <Input type="email" />
+          <Input type="password" />
+        </form>
+      </Frame>
+    </div>
+  );
 }
