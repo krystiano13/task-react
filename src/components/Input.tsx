@@ -2,13 +2,17 @@ import React from "react";
 
 interface Props {
   type: "email" | "password";
+  changePassword: (value: string) => void;
+  changeEmail: (value: string) => void;
 }
 
-export const Input: React.FC<Props> = ({ type }) => {
+export const Input: React.FC<Props> = ({
+  type,
+  changeEmail,
+  changePassword,
+}) => {
   return (
-    <label
-      className="input input-bordered transform-gpu transition-colors flex items-center gap-2"
-    >
+    <label className="input input-bordered transform-gpu transition-colors flex items-center gap-2">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
@@ -32,6 +36,11 @@ export const Input: React.FC<Props> = ({ type }) => {
       </svg>
       <input
         type={type}
+        onChange={
+          type === "email"
+            ? (e) => changeEmail(e.target.value)
+            : (e) => changePassword(e.target.value)
+        }
         className="grow"
         placeholder={type === "email" ? "Email" : "Password"}
       />
