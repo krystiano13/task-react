@@ -5,7 +5,7 @@ import { Tasks } from "./views/Tasks";
 function App() {
   return (
     <>
-      <div className="w-[100vw] h-[100vh]">
+      <div className="w-[100vw] h-[100vh] bg-[#f3f3f3]">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />

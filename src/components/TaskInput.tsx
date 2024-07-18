@@ -1,14 +1,15 @@
-export function TaskInput() {
+
+export const TaskInput = () => {
   return (
     <label
       id="taskInput"
-      className="input input-bordered md:w-[32rem] transition flex items-center gap-2"
+      className="input input-bordered md:w-[32rem] w-[90vw] transition flex items-center gap-2"
     >
-      <input type="text" className="grow" placeholder="Search" />
+      <input type="text" className="grow font-medium" placeholder="Search" />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
-        fill="currentColor"
+        fill="#48555f77"
         className="h-4 w-4 opacity-70"
       >
         <path
@@ -19,4 +20,4 @@ export function TaskInput() {
       </svg>
     </label>
   );
-}
+};
