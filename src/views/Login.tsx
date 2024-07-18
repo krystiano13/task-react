@@ -1,3 +1,5 @@
+import { motion } from "framer-motion";
+
 import { Frame } from "../components/Frame";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
@@ -6,13 +8,21 @@ export function Login() {
   return (
     <div className="w-full h-full flex justify-center items-center">
       <Frame>
-        <form className="flex flex-col justify-center items-center gap-4">
-          <Input animationDelay={0.2} type="email" />
-          <Input animationDelay={0.25} type="password" />
-          <Button animationDelay={0.3} type="submit">
-            Log In
-          </Button>
-        </form>
+        <motion.form
+          initial={{ scale: 0 }}
+          transition={{
+            type: "spring",
+            bounce: 0.3,
+            delay: 0.15,
+            duration: 0.35,
+          }}
+          animate={{ scale: [0, 1] }}
+          className="flex flex-col justify-center items-center gap-4"
+        >
+          <Input type="email" />
+          <Input type="password" />
+          <Button type="submit">Log In</Button>
+        </motion.form>
       </Frame>
     </div>
   );

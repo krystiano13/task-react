@@ -1,21 +1,12 @@
 import React from "react";
-import { motion } from "framer-motion";
 
 interface Props {
   type: "email" | "password";
-  animationDelay: number;
 }
 
-export const Input: React.FC<Props> = ({ type, animationDelay }) => {
+export const Input: React.FC<Props> = ({ type }) => {
   return (
-    <motion.label
-      transition={{
-        type: "tween",
-        bounce: 0.4,
-        delay: animationDelay,
-        duration: 0.15,
-      }}
-      animate={{ opacity: [0, 1], scale: [0.5, 1], y: [25, 0] }}
+    <label
       className="input input-bordered transform-gpu transition-colors flex items-center gap-2"
     >
       <svg
@@ -44,6 +35,6 @@ export const Input: React.FC<Props> = ({ type, animationDelay }) => {
         className="grow"
         placeholder={type === "email" ? "Email" : "Password"}
       />
-    </motion.label>
+    </label>
   );
 };
