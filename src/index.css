@@ -12,3 +12,8 @@
   border-color: #60c4b9;
   outline-color: #9fdbd3b4;
 }
+
+#taskInput:focus, #taskInput:focus-within {
+  border-width: 2px;
+  outline-offset: 0px;
+}

@@ -2,7 +2,8 @@ export async function login() {
   const res = await fetch("http://134.209.30.203/api/v1/login", {
     method: "POST",
     headers: {
-      Accept: "*/*",
+      'Accept': "*/*",
+      'Content-Type': "application/x-www-urlencoded"
     },
     body: JSON.stringify({
       email: "crystianotv@gmail.com",
