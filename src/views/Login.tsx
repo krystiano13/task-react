@@ -1,12 +1,27 @@
+import { useMutation } from "@tanstack/react-query";
+
 import { Frame } from "../components/Frame";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 
+import { login } from "../api/auth";
+
 export function Login() {
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => alert("Siadło"),
+  });
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <Frame>
-        <form className="animate-fade-up animate-duration-150 animate-delay-150 flex flex-col justify-center items-center gap-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            loginMutation.mutate();
+          }}
+          className="animate-fade-up animate-duration-150 animate-delay-150 flex flex-col justify-center items-center gap-4"
+        >
           <h2 className="font-semibold text-2xl">Log In</h2>
           <Input type="email" />
           <Input type="password" />
