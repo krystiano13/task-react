@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
 import { getTasks, createTask, bookmarkTask } from "../api/tasks";
+import { debounce } from "../utils/debounce";
 
 type Task = {
   name: string;
@@ -29,6 +30,11 @@ export function Tasks() {
   const tasksQuery = useQuery({
     queryKey: ["tasks"],
     queryFn: () => getTasks(inputValue),
+  });
+
+  const searchMutation = useMutation({
+    mutationFn: (value: string) => getTasks(value),
+    onSuccess: () => queryClient.refetchQueries({ queryKey: ["tasks"] }),
   });
 
   const createTaskMutation = useMutation({
@@ -55,6 +61,7 @@ export function Tasks() {
         <TaskInput
           change={(value: string) => {
             setInputValue(value);
+            searchMutation.mutate(value);
           }}
         />
         {menu && (

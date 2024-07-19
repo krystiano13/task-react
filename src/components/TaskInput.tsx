@@ -11,7 +11,9 @@ export const TaskInput: React.FC<Props> = ({ change }) => {
       className="input input-bordered md:w-[32rem] w-[90vw] transition flex items-center gap-2"
     >
       <input
-        onChange={debounce(e => change(e.target.value), 500)}
+        onChange={debounce((e) => {
+          change(e.target.value);
+        }, 250)}
         type="text"
         className="grow font-medium"
         placeholder="Search"
