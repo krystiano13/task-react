@@ -1,9 +1,11 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
+import { getTasks } from "../api/tasks";
 
 export function Tasks() {
   const [menu, setMenu] = useState<boolean>(true);
@@ -15,6 +17,11 @@ export function Tasks() {
       navigate("/");
     }
   }, []);
+
+  const tasksQuery = useQuery({
+    queryKey: ["tasks"],
+    queryFn: getTasks,
+  });
 
   return (
     <div className="w-[100vw] h-[100vh] pt-24 flex justify-center">

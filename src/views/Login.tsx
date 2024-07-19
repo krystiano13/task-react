@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 
@@ -16,6 +16,12 @@ export function Login() {
   const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (Cookies.get("user")) {
+      navigate("/tasks");
+    }
+  }, []);
 
   const loginMutation = useMutation({
     mutationFn: login,
