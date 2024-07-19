@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
 import { getTasks, createTask, bookmarkTask } from "../api/tasks";
-import { debounce } from "../utils/debounce";
 
 type Task = {
   name: string;
@@ -15,7 +14,7 @@ type Task = {
 };
 
 export function Tasks() {
-  const [menu, setMenu] = useState<boolean>(true);
+  const [menu, setMenu] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
 
   const navigate = useNavigate();
@@ -53,13 +52,15 @@ export function Tasks() {
 
   return (
     <div className="w-[100vw] h-[100vh] pt-24 flex justify-center">
-      <section
-        tabIndex={0}
-        onFocus={() => setMenu(true)}
-        onBlur={() => setMenu(true)}
-      >
+      <section>
         <TaskInput
           change={(value: string) => {
+            if (!value) {
+              setMenu(false);
+            } else {
+              setMenu(true);
+            }
+
             setInputValue(value);
             searchMutation.mutate(value);
           }}

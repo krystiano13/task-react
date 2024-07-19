@@ -1,4 +1,6 @@
 import React from "react";
+import star from "../assets/star.png";
+import star2 from "../assets/star2.png";
 
 interface Props {
   text: string;
@@ -30,6 +32,15 @@ export const TaskItem: React.FC<Props> = ({
         >
           {text}
         </span>
+        {!create && (
+          <>
+            {bookmarked ? (
+              <img className="h-[1rem]" src={star2} alt="star icon" />
+            ) : (
+              <img className="h-[1rem]" src={star} alt="star icon" />
+            )}
+          </>
+        )}
       </label>
     </li>
   );
