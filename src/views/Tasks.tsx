@@ -1,18 +1,17 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect} from "react";
 import { useNavigate } from "react-router";
+import Cookies from 'js-cookie';
 
 import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
-import { UserContext } from "../contexts/UserContext";
 
 export function Tasks() {
   const [menu, setMenu] = useState<boolean>(true);
 
-  const user = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user?.user.accessToken) {
+    if (!Cookies.get("user")) {
       navigate("/");
     }
   }, []);

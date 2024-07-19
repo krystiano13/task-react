@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
 
 import { Frame } from "../components/Frame";
 import { Input } from "../components/Input";
@@ -8,14 +9,12 @@ import { Button } from "../components/Button";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 
 import { login } from "../api/auth";
-import { UserContext } from "../contexts/UserContext";
 
 export function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
-  const user = useContext(UserContext);
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
@@ -30,9 +29,10 @@ export function Login() {
         setError(result.error);
       }
       if (result.accessToken) {
-        if (user) {
-          user.setUser(result);
-        }
+        Cookies.set("user", JSON.stringify(result), {
+          expires: 1,
+          secure: true,
+        });
         navigate("/tasks");
       }
     });
