@@ -28,7 +28,7 @@ export function Tasks() {
 
   const tasksQuery = useQuery({
     queryKey: ["tasks"],
-    queryFn: getTasks,
+    queryFn: () => getTasks(inputValue),
   });
 
   const createTaskMutation = useMutation({
@@ -52,7 +52,11 @@ export function Tasks() {
         onFocus={() => setMenu(true)}
         onBlur={() => setMenu(true)}
       >
-        <TaskInput change={(value: string) => setInputValue(value)} />
+        <TaskInput
+          change={(value: string) => {
+            setInputValue(value);
+          }}
+        />
         {menu && (
           <>
             <div className="menu p-0 rounded-xl bg-base-100 md:w-[32rem] w-[90vw] mt-2 font-medium">

@@ -1,3 +1,5 @@
+import { debounce } from "../utils/debounce";
+
 interface Props {
   change: (value: string) => void;
 }
@@ -9,7 +11,7 @@ export const TaskInput: React.FC<Props> = ({ change }) => {
       className="input input-bordered md:w-[32rem] w-[90vw] transition flex items-center gap-2"
     >
       <input
-        onChange={(e) => change(e.target.value)}
+        onChange={debounce(e => change(e.target.value), 500)}
         type="text"
         className="grow font-medium"
         placeholder="Search"

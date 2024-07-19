@@ -1,10 +1,10 @@
 import Cookies from "js-cookie";
 
-export async function getTasks() {
+export async function getTasks(name:string) {
   if (!Cookies.get("user")) return;
   const user = JSON.parse(Cookies.get("user") as string);
   const res = await fetch(
-    "https://timtest.timenotes.io/api/v1/tasks?page=1&per_page=10",
+    `https://timtest.timenotes.io/api/v1/tasks?name=${name}`,
     {
       method: "GET",
       headers: {
