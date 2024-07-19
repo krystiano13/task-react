@@ -8,6 +8,7 @@ import { TaskItem } from "../components/TaskItem";
 import { Button } from "../components/Button";
 import { Toast } from "../components/Toast";
 import { getTasks, createTask, bookmarkTask } from "../api/tasks";
+import { errorHandler } from "../utils/queries";
 
 type Task = {
   name: string;
@@ -36,14 +37,7 @@ export function Tasks() {
   const searchMutation = useMutation({
     mutationFn: (value: string) => getTasks(value),
     onSuccess: () => queryClient.refetchQueries({ queryKey: ["tasks"] }),
-    onError: (e) => {
-      if (e.message === "401") {
-        alert("Unauthorized Access");
-        navigate("/");
-      } else {
-        alert(e);
-      }
-    },
+    onError: (e) => errorHandler(e, () => navigate("/")),
   });
 
   const createTaskMutation = useMutation({
@@ -51,14 +45,7 @@ export function Tasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
-    onError: (e) => {
-      if (e.message === "401") {
-        alert("Unauthorized Access");
-        navigate("/");
-      } else {
-        alert(e);
-      }
-    },
+    onError: (e) => errorHandler(e, () => navigate("/")),
   });
 
   const bookmarkTaskMutation = useMutation({
@@ -66,14 +53,7 @@ export function Tasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
-    onError: (e) => {
-      if (e.message === "401") {
-        alert("Unauthorized Access");
-        navigate("/");
-      } else {
-        alert(e);
-      }
-    },
+    onError: (e) => errorHandler(e, () => navigate("/")),
   });
 
   function logout() {
