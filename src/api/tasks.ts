@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-export async function getTasks(name:string) {
+export async function getTasks(name: string) {
   if (!Cookies.get("user")) return;
   const user = JSON.parse(Cookies.get("user") as string);
   const res = await fetch(
@@ -14,7 +14,11 @@ export async function getTasks(name:string) {
   );
 
   const data = await res.json();
-  console.log(data);
+
+  if (data.error) {
+    throw new Error(data.error);
+  }
+
   return data;
 }
 
@@ -32,6 +36,15 @@ export async function createTask(task: string) {
   });
 
   const data = await res.json();
+
+  if (res.status === 401) {
+    throw new Error("401");
+  }
+
+  if (data.error) {
+    throw new Error(data.error);
+  }
+
   return data;
 }
 
@@ -52,5 +65,14 @@ export async function bookmarkTask(info: { id: number; bookmark: boolean }) {
   });
 
   const data = await res.json();
+
+  if (res.status === 401) {
+    throw new Error("401");
+  }
+
+  if (data.error) {
+    throw new Error(data.error);
+  }
+
   return data;
 }

@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 
 import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
+import { Button } from "../components/Button";
 import { getTasks, createTask, bookmarkTask } from "../api/tasks";
 
 type Task = {
@@ -34,12 +35,28 @@ export function Tasks() {
   const searchMutation = useMutation({
     mutationFn: (value: string) => getTasks(value),
     onSuccess: () => queryClient.refetchQueries({ queryKey: ["tasks"] }),
+    onError: (e) => {
+      if (e.message === "401") {
+        alert("Unauthorized Access");
+        navigate("/");
+      } else {
+        alert(e);
+      }
+    },
   });
 
   const createTaskMutation = useMutation({
     mutationFn: createTask,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (e) => {
+      if (e.message === "401") {
+        alert("Unauthorized Access");
+        navigate("/");
+      } else {
+        alert(e);
+      }
     },
   });
 
@@ -48,7 +65,20 @@ export function Tasks() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
+    onError: (e) => {
+      if (e.message === "401") {
+        alert("Unauthorized Access");
+        navigate("/");
+      } else {
+        alert(e);
+      }
+    },
   });
+
+  function logout() {
+    Cookies.remove("user");
+    navigate("/");
+  }
 
   return (
     <div className="w-[100vw] h-[100vh] pt-24 flex justify-center">
@@ -130,6 +160,11 @@ export function Tasks() {
           </>
         )}
       </section>
+      <div className="toast">
+        <Button onClick={logout} type="button">
+          Log Out
+        </Button>
+      </div>
     </div>
   );
 }
