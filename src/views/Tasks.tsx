@@ -7,7 +7,7 @@ import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
 import { Button } from "../components/Button";
 import { Toast } from "../components/Toast";
-import { getTasks, createTask, bookmarkTask } from "../api/tasks";
+import { getTasks, createTask } from "../api/tasks";
 import { errorHandler } from "../utils/queries";
 
 type Task = {
@@ -48,14 +48,6 @@ export function Tasks() {
     onError: (e) => errorHandler(e, () => navigate("/")),
   });
 
-  const bookmarkTaskMutation = useMutation({
-    mutationFn: bookmarkTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
-    onError: (e) => errorHandler(e, () => navigate("/")),
-  });
-
   function logout() {
     Cookies.remove("user");
     navigate("/");
@@ -89,13 +81,8 @@ export function Tasks() {
                       (item: Task) =>
                         item.bookmarked && (
                           <TaskItem
+                            taskID={item.id}
                             key={item.id}
-                            bookmark={() =>
-                              bookmarkTaskMutation.mutate({
-                                id: item.id,
-                                bookmark: false,
-                              })
-                            }
                             bookmarked
                             text={item.name}
                           />
@@ -112,12 +99,7 @@ export function Tasks() {
                       (item: Task) =>
                         !item.bookmarked && (
                           <TaskItem
-                            bookmark={() =>
-                              bookmarkTaskMutation.mutate({
-                                id: item.id,
-                                bookmark: true,
-                              })
-                            }
+                            taskID={item.id}
                             key={item.id}
                             bookmarked={false}
                             text={item.name}
@@ -132,6 +114,7 @@ export function Tasks() {
                   Create a new task
                 </h2>
                 <TaskItem
+                  taskID={-1}
                   create={() => createTaskMutation.mutate(inputValue)}
                   bookmarked={false}
                   text={`Create a new task - "${inputValue}"`}

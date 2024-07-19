@@ -1,24 +1,46 @@
 import React from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { errorHandler } from "../utils/queries";
+import { useNavigate } from "react-router";
+
+import { bookmarkTask } from "../api/tasks";
+
 import star from "../assets/star.png";
 import star2 from "../assets/star2.png";
 
 interface Props {
+  taskID: number;
   text: string;
   bookmarked: boolean;
   create?: () => void;
-  bookmark?: () => void;
 }
 
 export const TaskItem: React.FC<Props> = ({
+  taskID,
   text,
   bookmarked,
   create,
-  bookmark,
 }) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const bookmarkTaskMutation = useMutation({
+    mutationFn: bookmarkTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+    onError: (e) => errorHandler(e, () => navigate("/")),
+  });
+
   return (
     <li
       className="w-full animate-fade animate-duration-300"
-      onClick={create ? create : bookmark ? bookmark : () => {}}
+      onClick={
+        create
+          ? create
+          : () =>
+              bookmarkTaskMutation.mutate({ id: taskID, bookmark: !bookmarked })
+      }
     >
       <label
         className={`${
