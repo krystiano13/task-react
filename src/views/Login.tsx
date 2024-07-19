@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router";
 
 import { Frame } from "../components/Frame";
@@ -8,12 +8,14 @@ import { Button } from "../components/Button";
 import { LoadingSpinner } from "../components/LoadingSpinner";
 
 import { login } from "../api/auth";
+import { UserContext } from "../contexts/UserContext";
 
 export function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const user = useContext(UserContext);
   const navigate = useNavigate();
 
   const loginMutation = useMutation({
@@ -28,6 +30,9 @@ export function Login() {
         setError(result.error);
       }
       if (result.accessToken) {
+        if (user) {
+          user.setUser(result);
+        }
         navigate("/tasks");
       }
     });
