@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 
 import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
-import { getTasks } from "../api/tasks";
+import { getTasks, createTask } from "../api/tasks";
+
+type Task = {
+  name: string;
+  bookmarked: boolean;
+  id: number;
+};
 
 export function Tasks() {
   const [menu, setMenu] = useState<boolean>(true);
+  const [inputValue, setInputValue] = useState<string>("");
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!Cookies.get("user")) {
@@ -23,6 +31,13 @@ export function Tasks() {
     queryFn: getTasks,
   });
 
+  const createTaskMutation = useMutation({
+    mutationFn: createTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
   return (
     <div className="w-[100vw] h-[100vh] pt-24 flex justify-center">
       <section
@@ -30,7 +45,7 @@ export function Tasks() {
         onFocus={() => setMenu(true)}
         onBlur={() => setMenu(true)}
       >
-        <TaskInput />
+        <TaskInput change={(value: string) => setInputValue(value)} />
         {menu && (
           <>
             <div className="menu p-0 rounded-xl bg-base-100 md:w-[32rem] w-[90vw] mt-2 font-medium">
@@ -38,17 +53,47 @@ export function Tasks() {
                 <h2 className="text-neutral p-3 text-opacity-70">
                   Bookmarked Tasks
                 </h2>
-                <TaskItem bookmarked text="API Integration" />
+                {tasksQuery.isSuccess && (
+                  <>
+                    {tasksQuery.data.data.map(
+                      (item: Task) =>
+                        item.bookmarked && (
+                          <TaskItem
+                            key={item.id}
+                            bookmarked
+                            text={item.name}
+                          />
+                        )
+                    )}
+                  </>
+                )}
               </ul>
               <ul>
                 <h2 className="text-neutral p-3 text-opacity-70">Tasks</h2>
-                <TaskItem bookmarked={false} text="API Specification" />
+                {tasksQuery.isSuccess && (
+                  <>
+                    {tasksQuery.data.data.map(
+                      (item: Task) =>
+                        !item.bookmarked && (
+                          <TaskItem
+                            key={item.id}
+                            bookmarked={false}
+                            text={item.name}
+                          />
+                        )
+                    )}
+                  </>
+                )}
               </ul>
               <div>
                 <h2 className="text-neutral p-3 text-opacity-70">
                   Create a new task
                 </h2>
-                <TaskItem bookmarked={false} text="API Specification" />
+                <TaskItem
+                  create={() => createTaskMutation.mutate(inputValue)}
+                  bookmarked={false}
+                  text={`Create a new task - "${inputValue}"`}
+                />
               </div>
             </div>
           </>

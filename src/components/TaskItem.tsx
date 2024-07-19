@@ -3,11 +3,12 @@ import React from "react";
 interface Props {
   text: string;
   bookmarked: boolean;
+  create?: () => void;
 }
 
-export const TaskItem: React.FC<Props> = ({ text, bookmarked }) => {
+export const TaskItem: React.FC<Props> = ({ text, bookmarked, create }) => {
   return (
-    <li className="w-full">
+    <li className="w-full" onClick={create ? create : () => {}}>
       <label
         className={`${
           bookmarked && "bg-secondary hover:bg-[#c6f7f4]"

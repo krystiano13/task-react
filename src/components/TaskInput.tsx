@@ -1,11 +1,19 @@
+interface Props {
+  change: (value: string) => void;
+}
 
-export const TaskInput = () => {
+export const TaskInput: React.FC<Props> = ({ change }) => {
   return (
     <label
       id="taskInput"
       className="input input-bordered md:w-[32rem] w-[90vw] transition flex items-center gap-2"
     >
-      <input type="text" className="grow font-medium" placeholder="Search" />
+      <input
+        onChange={(e) => change(e.target.value)}
+        type="text"
+        className="grow font-medium"
+        placeholder="Search"
+      />
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 16 16"
