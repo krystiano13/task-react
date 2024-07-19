@@ -8,7 +8,7 @@ export const TaskInput: React.FC<Props> = ({ change }) => {
   return (
     <label
       id="taskInput"
-      className="input input-bordered md:w-[32rem] w-[90vw] transition flex items-center gap-2"
+      className="input input-bordered md:w-[32rem] w-[90vw] transition flex items-center gap-2 animate-fade-up animate-duration-150"
     >
       <input
         onChange={debounce((e) => {

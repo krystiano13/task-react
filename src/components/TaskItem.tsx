@@ -17,7 +17,7 @@ export const TaskItem: React.FC<Props> = ({
 }) => {
   return (
     <li
-      className="w-full"
+      className="w-full animate-fade animate-duration-300"
       onClick={create ? create : bookmark ? bookmark : () => {}}
     >
       <label
