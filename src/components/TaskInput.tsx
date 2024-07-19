@@ -1,10 +1,23 @@
 import { debounce } from "../utils/debounce";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { errorHandler } from "../utils/queries";
+import { useNavigate } from "react-router";
+import { getTasks } from "../api/tasks";
 
 interface Props {
-  change: (value: string) => void;
+  change: (value: string, mutation: () => void) => void;
 }
 
 export const TaskInput: React.FC<Props> = ({ change }) => {
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const searchMutation = useMutation({
+    mutationFn: (value: string) => getTasks(value),
+    onSuccess: () => queryClient.refetchQueries({ queryKey: ["tasks"] }),
+    onError: (e) => errorHandler(e, () => navigate("/")),
+  });
+
   return (
     <label
       id="taskInput"
@@ -12,7 +25,7 @@ export const TaskInput: React.FC<Props> = ({ change }) => {
     >
       <input
         onChange={debounce((e) => {
-          change(e.target.value);
+          change(e.target.value, () => searchMutation.mutate(e.target.value));
         }, 250)}
         type="text"
         className="grow font-medium"

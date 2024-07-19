@@ -8,13 +8,8 @@ import { TaskItem } from "../components/TaskItem";
 import { Button } from "../components/Button";
 import { Toast } from "../components/Toast";
 import { getTasks, createTask } from "../api/tasks";
+import { TaskList } from "../components/TaskList";
 import { errorHandler } from "../utils/queries";
-
-type Task = {
-  name: string;
-  bookmarked: boolean;
-  id: number;
-};
 
 export function Tasks() {
   const [menu, setMenu] = useState<boolean>(false);
@@ -34,12 +29,6 @@ export function Tasks() {
     queryFn: () => getTasks(inputValue),
   });
 
-  const searchMutation = useMutation({
-    mutationFn: (value: string) => getTasks(value),
-    onSuccess: () => queryClient.refetchQueries({ queryKey: ["tasks"] }),
-    onError: (e) => errorHandler(e, () => navigate("/")),
-  });
-
   const createTaskMutation = useMutation({
     mutationFn: createTask,
     onSuccess: () => {
@@ -57,15 +46,10 @@ export function Tasks() {
     <div className="w-[100vw] h-[100vh] pt-24 flex justify-center">
       <section>
         <TaskInput
-          change={(value: string) => {
-            if (!value) {
-              setMenu(false);
-            } else {
-              setMenu(true);
-            }
-
+          change={(value: string, mutation: () => void) => {
+            value ? setMenu(true) : setMenu(false);
             setInputValue(value);
-            searchMutation.mutate(value);
+            mutation();
           }}
         />
         {menu && (
@@ -76,37 +60,16 @@ export function Tasks() {
                   Bookmarked Tasks
                 </h2>
                 {tasksQuery.isSuccess && (
-                  <>
-                    {tasksQuery.data.data.map(
-                      (item: Task) =>
-                        item.bookmarked && (
-                          <TaskItem
-                            taskID={item.id}
-                            key={item.id}
-                            bookmarked
-                            text={item.name}
-                          />
-                        )
-                    )}
-                  </>
+                  <TaskList bookmarked queryData={tasksQuery.data.data} />
                 )}
               </ul>
               <ul>
                 <h2 className="text-neutral p-3 text-opacity-70">Tasks</h2>
                 {tasksQuery.isSuccess && (
-                  <>
-                    {tasksQuery.data.data.map(
-                      (item: Task) =>
-                        !item.bookmarked && (
-                          <TaskItem
-                            taskID={item.id}
-                            key={item.id}
-                            bookmarked={false}
-                            text={item.name}
-                          />
-                        )
-                    )}
-                  </>
+                  <TaskList
+                    bookmarked={false}
+                    queryData={tasksQuery.data.data}
+                  />
                 )}
               </ul>
               <div>
