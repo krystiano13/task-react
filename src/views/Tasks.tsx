@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
-import { getTasks, createTask } from "../api/tasks";
+import { getTasks, createTask, bookmarkTask } from "../api/tasks";
 
 type Task = {
   name: string;
@@ -38,6 +38,13 @@ export function Tasks() {
     },
   });
 
+  const bookmarkTaskMutation = useMutation({
+    mutationFn: bookmarkTask,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks"] });
+    },
+  });
+
   return (
     <div className="w-[100vw] h-[100vh] pt-24 flex justify-center">
       <section
@@ -60,6 +67,12 @@ export function Tasks() {
                         item.bookmarked && (
                           <TaskItem
                             key={item.id}
+                            bookmark={() =>
+                              bookmarkTaskMutation.mutate({
+                                id: item.id,
+                                bookmark: false,
+                              })
+                            }
                             bookmarked
                             text={item.name}
                           />
@@ -76,6 +89,12 @@ export function Tasks() {
                       (item: Task) =>
                         !item.bookmarked && (
                           <TaskItem
+                            bookmark={() =>
+                              bookmarkTaskMutation.mutate({
+                                id: item.id,
+                                bookmark: true,
+                              })
+                            }
                             key={item.id}
                             bookmarked={false}
                             text={item.name}

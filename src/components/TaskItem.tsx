@@ -4,11 +4,20 @@ interface Props {
   text: string;
   bookmarked: boolean;
   create?: () => void;
+  bookmark?: () => void;
 }
 
-export const TaskItem: React.FC<Props> = ({ text, bookmarked, create }) => {
+export const TaskItem: React.FC<Props> = ({
+  text,
+  bookmarked,
+  create,
+  bookmark,
+}) => {
   return (
-    <li className="w-full" onClick={create ? create : () => {}}>
+    <li
+      className="w-full"
+      onClick={create ? create : bookmark ? bookmark : () => {}}
+    >
       <label
         className={`${
           bookmarked && "bg-secondary hover:bg-[#c6f7f4]"
