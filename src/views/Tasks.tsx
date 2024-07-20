@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 
@@ -7,16 +7,16 @@ import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
 import { Button } from "../components/Button";
 import { Toast } from "../components/Toast";
-import { getTasks, createTask } from "../api/tasks";
+import { getTasks } from "../api/tasks";
 import { TaskList } from "../components/TaskList";
-import { errorHandler } from "../utils/queries";
+import { useTaskCreate } from "../hooks/useTaskCreate";
 
 export function Tasks() {
   const [menu, setMenu] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
 
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const taskCreate = useTaskCreate();
 
   useEffect(() => {
     if (!Cookies.get("user")) {
@@ -27,14 +27,6 @@ export function Tasks() {
   const tasksQuery = useQuery({
     queryKey: ["tasks"],
     queryFn: () => getTasks(inputValue),
-  });
-
-  const createTaskMutation = useMutation({
-    mutationFn: createTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
-    onError: (e) => errorHandler(e, () => navigate("/")),
   });
 
   function logout() {
@@ -78,7 +70,7 @@ export function Tasks() {
                 </h2>
                 <TaskItem
                   taskID={-1}
-                  create={() => createTaskMutation.mutate(inputValue)}
+                  create={() => taskCreate.mutate(inputValue)}
                   bookmarked={false}
                   text={`Create a new task - "${inputValue}"`}
                 />
