@@ -1,5 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 
@@ -7,8 +6,7 @@ import { Frame } from "../components/Frame";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
 import { LoadingSpinner } from "../components/LoadingSpinner";
-
-import { login } from "../api/auth";
+import { useLogin } from "../hooks/useLogin";
 
 export function Login() {
   const [email, setEmail] = useState<string>("");
@@ -23,37 +21,18 @@ export function Login() {
     }
   }, []);
 
-  const loginMutation = useMutation({
-    mutationFn: login,
-  });
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError("");
-    loginMutation.mutateAsync({ email, password }).then((result) => {
-      if (result.error) {
-        setError(result.error);
-      }
-      if (result.accessToken) {
-        Cookies.set("user", JSON.stringify(result), {
-          expires: 1,
-          secure: true,
-        });
-        navigate("/tasks");
-      }
-    });
-  }
+  const login = useLogin((error: string) => setError(error), email, password);
 
   return (
     <div className="w-full h-full flex justify-center items-center">
       <Frame>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={login.submit}
           className="animate-fade-up animate-duration-150 animate-delay-150 flex flex-col justify-center items-center gap-4"
         >
           <h2 className="font-semibold text-2xl">Log In</h2>
-          {loginMutation.isPending && <LoadingSpinner />}
-          {(loginMutation.isIdle || loginMutation.isSuccess) && (
+          {login.mutation.isPending && <LoadingSpinner />}
+          {(login.mutation.isIdle || login.mutation.isSuccess) && (
             <>
               <Input
                 changeEmail={(value: string) => setEmail(value)}
