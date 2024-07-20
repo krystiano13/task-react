@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTasks } from "../api/tasks";
+import { getTasks } from "../api/getTasks";
 
 export function useTasks(inputValue: string) {
   return useQuery({

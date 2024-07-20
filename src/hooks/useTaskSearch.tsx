@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { getTasks } from "../api/tasks";
+import { getTasks } from "../api/getTasks";
 import { useNavigate } from "react-router";
 import { errorHandler } from "../utils/queries";
 

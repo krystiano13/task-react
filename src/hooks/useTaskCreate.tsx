@@ -1,4 +1,4 @@
-import { createTask } from "../api/tasks";
+import { createTask } from "../api/createTasks";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { errorHandler } from "../utils/queries";

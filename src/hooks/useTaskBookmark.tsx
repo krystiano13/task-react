@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
-import { bookmarkTask } from "../api/tasks";
+import { bookmarkTask } from "../api/bookmarkTask";
 import { errorHandler } from "../utils/queries";
 
 export function useTaskBookmark() {
