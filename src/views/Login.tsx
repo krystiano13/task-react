@@ -32,7 +32,7 @@ export function Login() {
         >
           <h2 className="font-semibold text-2xl">Log In</h2>
           {login.mutation.isPending && <LoadingSpinner />}
-          {(login.mutation.isIdle || login.mutation.isSuccess) && (
+          {(login.mutation.isIdle || login.mutation.isSuccess || login.mutation.isError) && (
             <>
               <Input
                 changeEmail={(value: string) => setEmail(value)}

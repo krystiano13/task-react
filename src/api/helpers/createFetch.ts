@@ -17,7 +17,10 @@ export async function createFetch(
 
   const data = await res.json();
 
-  checkErrors(res, data);
+  if (token) checkErrors(res, data);
+  else if (data.error) {
+    throw new Error(data.error);
+  }
 
   return data;
 }

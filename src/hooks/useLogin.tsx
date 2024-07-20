@@ -10,8 +10,12 @@ export function useLogin(
 ) {
   const loginMutation = useMutation({
     mutationFn: login,
+    onError: (err) => {
+      setError(err.message);
+    },
   });
   const navigate = useNavigate();
+  let error = false;
 
   function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -33,5 +37,6 @@ export function useLogin(
   return {
     mutation: loginMutation,
     submit: submit,
+    error: error,
   };
 }
