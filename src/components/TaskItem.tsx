@@ -1,9 +1,5 @@
 import React from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { errorHandler } from "../utils/queries";
-import { useNavigate } from "react-router";
-
-import { bookmarkTask } from "../api/tasks";
+import { useTaskBookmark } from "../hooks/useTaskBookmark";
 
 import star from "../assets/star.png";
 import star2 from "../assets/star2.png";
@@ -21,16 +17,7 @@ export const TaskItem: React.FC<Props> = ({
   bookmarked,
   create,
 }) => {
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
-
-  const bookmarkTaskMutation = useMutation({
-    mutationFn: bookmarkTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tasks"] });
-    },
-    onError: (e) => errorHandler(e, () => navigate("/")),
-  });
+  const bookmark = useTaskBookmark();
 
   return (
     <li
@@ -38,8 +25,7 @@ export const TaskItem: React.FC<Props> = ({
       onClick={
         create
           ? create
-          : () =>
-              bookmarkTaskMutation.mutate({ id: taskID, bookmark: !bookmarked })
+          : () => bookmark.mutate({ id: taskID, bookmark: !bookmarked })
       }
     >
       <label
