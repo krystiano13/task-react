@@ -41,7 +41,7 @@ export function Tasks() {
         />
         {menu && (
           <>
-            <div className="animate-fade-up animate-duration-150 menu p-0 rounded-xl bg-base-100 md:w-[32rem] w-[90vw] mt-2 font-medium">
+            <div className="animate-fade-up animate-duration-150 menu p-0 rounded-xl bg-base-100 md:w-[32rem] w-[90vw] mt-2 font-medium flex flex-col flex-nowrap overflow-y-auto max-h-[32rem]">
               <ul>
                 <h2 className="text-neutral p-3 text-opacity-70">
                   Bookmarked Tasks
