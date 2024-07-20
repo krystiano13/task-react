@@ -1,27 +1,17 @@
 import Cookies from "js-cookie";
+import { createFetch } from "./helpers/createFetch";
+import { checkErrors } from "./helpers/checkErrors";
 
 export async function createTask(task: string) {
   if (!Cookies.get("user")) return;
   const user = JSON.parse(Cookies.get("user") as string);
+  const url = "https://timtest.timenotes.io/api/v1/tasks";
 
-  const res = await fetch("https://timtest.timenotes.io/api/v1/tasks", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: user.accessToken,
-    },
-    body: JSON.stringify({ name: task }),
-  });
+  const res = await createFetch(url, "POST", user.accessToken, { name: task });
 
   const data = await res.json();
 
-  if (res.status === 401) {
-    throw new Error("401");
-  }
-
-  if (data.error) {
-    throw new Error(data.error);
-  }
+  checkErrors(res, data);
 
   return data;
 }

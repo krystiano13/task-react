@@ -1,4 +1,6 @@
 import Cookies from "js-cookie";
+import { createFetch } from "./helpers/createFetch";
+import { checkErrors } from "./helpers/checkErrors";
 
 export async function bookmarkTask(info: { id: number; bookmark: boolean }) {
   if (!Cookies.get("user")) return;
@@ -6,25 +8,13 @@ export async function bookmarkTask(info: { id: number; bookmark: boolean }) {
 
   const url = `https://timtest.timenotes.io/api/v1/tasks/${info.id}/${
     info.bookmark ? "" : "un"
-  } bookmark`;
+  }bookmark`;
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: user.accessToken,
-    },
-  });
+  const res = await createFetch(url, "POST", user.accessToken);
 
   const data = await res.json();
 
-  if (res.status === 401) {
-    throw new Error("401");
-  }
-
-  if (data.error) {
-    throw new Error(data.error);
-  }
+  checkErrors(res, data);
 
   return data;
 }
