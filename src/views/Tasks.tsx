@@ -22,6 +22,11 @@ export function Tasks() {
     if (!Cookies.get("user")) {
       navigate("/");
     }
+
+    if(tasks.isError) {
+      Cookies.remove("user");
+      navigate("/");
+    }
   }, []);
 
   function logout() {
