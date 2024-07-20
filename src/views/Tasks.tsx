@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import Cookies from "js-cookie";
 
@@ -7,9 +6,9 @@ import { TaskInput } from "../components/TaskInput";
 import { TaskItem } from "../components/TaskItem";
 import { Button } from "../components/Button";
 import { Toast } from "../components/Toast";
-import { getTasks } from "../api/tasks";
 import { TaskList } from "../components/TaskList";
 import { useTaskCreate } from "../hooks/useTaskCreate";
+import { useTasks } from "../hooks/useTasks";
 
 export function Tasks() {
   const [menu, setMenu] = useState<boolean>(false);
@@ -17,17 +16,13 @@ export function Tasks() {
 
   const navigate = useNavigate();
   const taskCreate = useTaskCreate();
+  const tasks = useTasks(inputValue);
 
   useEffect(() => {
     if (!Cookies.get("user")) {
       navigate("/");
     }
   }, []);
-
-  const tasksQuery = useQuery({
-    queryKey: ["tasks"],
-    queryFn: () => getTasks(inputValue),
-  });
 
   function logout() {
     Cookies.remove("user");
@@ -51,17 +46,14 @@ export function Tasks() {
                 <h2 className="text-neutral p-3 text-opacity-70">
                   Bookmarked Tasks
                 </h2>
-                {tasksQuery.isSuccess && (
-                  <TaskList bookmarked queryData={tasksQuery.data.data} />
+                {tasks.isSuccess && (
+                  <TaskList bookmarked queryData={tasks.data.data} />
                 )}
               </ul>
               <ul>
                 <h2 className="text-neutral p-3 text-opacity-70">Tasks</h2>
-                {tasksQuery.isSuccess && (
-                  <TaskList
-                    bookmarked={false}
-                    queryData={tasksQuery.data.data}
-                  />
+                {tasks.isSuccess && (
+                  <TaskList bookmarked={false} queryData={tasks.data.data} />
                 )}
               </ul>
               <div>
